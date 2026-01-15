@@ -1,0 +1,26 @@
+name: Build Spyglass Server
+on:
+  schedule:
+    - cron: '0 0 * * *' # 毎日深夜に実行
+  workflow_dispatch: # 手動実行も可能
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      
+      - name: Build JS
+        run: |
+          npm install @spyglassmc/language-server @vercel/ncc
+          npx ncc build node_modules/@spyglassmc/language-server/lib/server.js -o dist -m
+      
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest
+          files: dist/index.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
