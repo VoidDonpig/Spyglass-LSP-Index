@@ -15,7 +15,7 @@ jobs:
       - name: Build JS
         run: |
           npm install @spyglassmc/language-server @vercel/ncc
-          npx ncc build node_modules/@spyglassmc/language-server/lib/server.js -o dist -m
+          npx ncc build node_modules/@spyglassmc/language-server/lib/server.js -o dist
       
       - name: Release
         uses: softprops/action-gh-release@v1
